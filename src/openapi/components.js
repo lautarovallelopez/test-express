@@ -70,6 +70,93 @@ module.exports = {
                 }
             }
         },
+        Operativo : {
+            type : 'object',
+            properties : {
+                id : {
+                    description: 'id of user',
+                    type: 'string',
+                    format: 'uuid'
+                },
+                id_operativo : {type : 'integer'},
+                id_fuente : {
+                    type : 'integer',
+                    nullable : true
+                },
+                descripcion : {
+                    type : 'string',
+                    nullable : true
+                },
+                observacion : {
+                    type : 'string',
+                    nullable : true
+                },
+                dominio : {
+                    type : 'string',
+                    nullable : true
+                },
+                fecha_llegada_paquete : {
+                    oneOf:[
+                        {type : 'string'},
+                        {type: 'object'}
+                    ],
+                    nullable : true
+                },
+                formato_del_archivo : {
+                    type : 'string',
+                    nullable : true
+                },
+                total_registros : {
+                    type : 'integer',
+                    nullable: true
+                },
+                contacto_operativo : {
+                    type : 'string',
+                    nullable : true
+                },
+                mail_contacto : {
+                    type: 'string',
+                    nullable : true
+                },
+                fecha_inicio_codificacion : {
+                    oneOf:[
+                        {type : 'string'},
+                        {type: 'object'}
+                    ],
+                    nullable : true
+                },
+                fecha_fin_codificacion : {
+                    oneOf:[
+                        {type : 'string'},
+                        {type: 'object'}
+                    ],
+                    nullable : true
+                },
+                fecha_entrega_operativo : {
+                    oneOf:[
+                        {type : 'string'},
+                        {type: 'object'}
+                    ],
+                    nullable : true
+                },
+                id_estado_operativo : {
+                    type : 'integer',
+                    nullable : true
+                },
+                calidad_operativo : {
+                    type : 'number',
+                    nullable: true
+                },
+                nivel_error_operativo : {
+                    type : 'number',
+                    nullable: true
+                },
+                id_usuario : {
+                    type : 'integer',
+                    nullable : true
+                }
+            }
+        },
         Error: {
             type: 'object',
             required: [

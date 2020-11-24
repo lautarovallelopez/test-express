@@ -1,3 +1,11 @@
-const countries = require('./countries');
+const operativo = require('./operativo');
+const estructuraOperativo = require('./estructuraOperativo');
+const options = require('./options');
+const lote = require('./lote');
 
-module.exports = {...countries};
+module.exports = {
+    ...operativo,
+    ...estructuraOperativo,
+    ...options,
+    ...lote
+};
