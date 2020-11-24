@@ -7,7 +7,7 @@ const path = require('path');
 const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express');
 const {OpenApiValidator} = require('express-openapi-validator');
-
+const multer = require('multer');
 const mongoose = require('./helpers/mongoose');
 const logger = require('./helpers/logger');
 
@@ -95,7 +95,17 @@ class App {
         }
         return;
     }
-
+    _storeFile(){
+        const storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, `public/${file.fieldname}`);
+            },
+            filename: function (req, file, cb) {
+                cb(null, `${new Date().toISOString()}-${file.originalname}`);
+            }
+        });
+        return storage;
+    }
     async _routes() {
         try {
             const apiSpec = include('openapi');
@@ -105,7 +115,8 @@ class App {
             await new OpenApiValidator({
                 apiSpec,
                 validateRequests: true,
-                validateResponses: true
+                validateResponses: true,
+                fileUploader: {storage: this._storeFile()}
             }).install(this.app);
             Router.configure(this.app);
         } catch (err) {
