@@ -5,3 +5,4 @@ coverage
 *.log
 .nyc_output
 .vscode
+public/*
