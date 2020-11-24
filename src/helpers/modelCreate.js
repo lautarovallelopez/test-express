@@ -8,7 +8,7 @@ const isArray = require('lodash/isArray');
 const isObject = require('lodash/isObject');
 const map = require('lodash/map');
 const toLower = require('lodash/toLower');
-
+const transform = require('lodash/transform');
 // The model that uses Knexjs to store and retrieve data from a
 // database using the provided `knex` instance.
 // Custom functionality can be composed on top of this set of models.
@@ -22,13 +22,14 @@ const ORDER_BY = [{
 }];
 class ModelCreate {
     constructor({
-        knex, name, tableName, selectableProps, timeout
+        knex, name, tableName, selectableProps, timeout, idName
     }) {
         this.knex = knex || {},
         this.name = name || 'name',
         this.tableName = tableName || 'tablename',
         this.selectableProps = selectableProps || [],
         this.timeout = timeout || 10000;
+        this.idName = idName || '';
     }
 
     async startTransaction () {
@@ -66,13 +67,13 @@ class ModelCreate {
     }
 
     insertOne (props) {
-        const objectToSave = this.jsonToString(props);
+        const objectToSave = this.removeEmpty(this.jsonToString(props));
+
         objectToSave.id = uuid();
         objectToSave.__v = 0;
         objectToSave.createdAt = new Date();
         if (this.transaction) {
-            return this.transaction(this.tableName).insert(objectToSave).returning(this.selectableProps)
-                .timeout(this.timeout);
+            return this.transaction(this.tableName).insert(objectToSave);
         }
         return this.knex.insert(objectToSave).returning(this.selectableProps)
             .into(this.tableName).timeout(this.timeout);
@@ -82,16 +83,15 @@ class ModelCreate {
         if (isArray(props) && head(props) instanceof Object) {
             const inserts = map(props, prop => ({
                 id: uuid(),
-                ...prop,
+                ...this.removeEmpty(this.jsonToString(prop)),
                 __v: 0,
                 createdAt: new Date()
             }));
             if (this.transaction) {
-                return this.transaction(this.tableName).insert(inserts)
+                return this.transaction(this.tableName).insert(inserts).returning(this.selectableProps)
                     .timeout(this.timeout);
             }
-            console.log(inserts[0]);
-            return this.knex.insert(inserts)
+            return this.knex.insert(inserts).returning(this.selectableProps)
                 .into(this.tableName).timeout(this.timeout);
         }
         return Promise.reject('not a valid array of data');
@@ -147,7 +147,7 @@ class ModelCreate {
             props.__v = 0;
         }
 
-        const objectToSave = this.jsonToString(props);
+        const objectToSave = this.removeEmpty(this.jsonToString(props));
         if (this.transaction) {
             const modifiedObject = await this.transaction(this.tableName)
                 .update(objectToSave).from(this.tableName).where(filters)
@@ -182,12 +182,12 @@ class ModelCreate {
         return Promise.reject('not a valid array of data');
     }
 
-    deletedOne (id) {
+    deletedOne (id = {id:null}) {
         if (this.transaction) {
             return this.transaction(this.tableName).update({
                 deleted: true,
                 deletedAt: new Date()
-            }).where({id}).timeout(this.timeout);
+            }).where(id).timeout(this.timeout);
         }
         return this.knex.update({
             deleted: true,
@@ -200,18 +200,18 @@ class ModelCreate {
             if (this.transaction) {
                 return this.transaction(this.tableName).update({
                     deleted: true,
-                    deletedAt: new Date()
+                    deletedat: new Date()
                 }).whereIn('id', ids).timeout(this.timeout);
             }
             return this.knex.update({
                 deleted: true,
-                deletedAt: new Date()
+                deletedat: new Date()
             }).from(this.tableName).whereIn('id', ids).timeout(this.timeout);
         }
     }
 
     async countDocuments (filters = {}) {
-        const {count} = head(await this.knex(this.tableName).count('id').where(filters).timeout(this.timeout));
+        const count = head(await this.knex(this.tableName).count('id').where(filters).timeout(this.timeout))[''];
         return count;
     }
 
@@ -227,6 +227,15 @@ class ModelCreate {
             console.log(filters, props);
             return false;
         }
+    }
+
+    removeEmpty(object){
+        const newObject = transform(object, (result, value, key)=>{
+            if(value){
+                result[key]=value;
+            }
+        }, {});
+        return newObject;
     }
 }
 
