@@ -2,7 +2,6 @@ const ModelCreate = include('/helpers/modelCreate');
 const name = 'Frecuencia';
 const tableName = 'SNN_FRECUENCIA';
 const selectableProps = [
-    'id',
     'id_frecuencia',
     'descripcion'
 ];

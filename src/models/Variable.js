@@ -2,7 +2,6 @@ const ModelCreate = include('/helpers/modelCreate');
 const name = 'Variable';
 const tableName = 'SNN_VARIABLES';
 const selectableProps = [
-    'id',
     'id_variable',
     'nombre',
     'abreviatura',

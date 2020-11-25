@@ -2,7 +2,6 @@ const ModelCreate = include('/helpers/modelCreate');
 const name = 'TipoPregunta';
 const tableName = 'SNN_TIPO_PREGUNTA';
 const selectableProps = [
-    'id',
     'id_abierta_cerrada',
     'descripcion'
 ];

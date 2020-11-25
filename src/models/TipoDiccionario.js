@@ -2,7 +2,6 @@ const ModelCreate = include('/helpers/modelCreate');
 const name = 'TipoDiccionario';
 const tableName = 'SNN_TIPOS_DE_DICCIONARIOS_LINGUISTICOS';
 const selectableProps = [
-    'id',
     'id_tipologia_de_diccionarios',
     'descripcion',
     'si_palabra_no_frase',

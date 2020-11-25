@@ -2,7 +2,6 @@ const ModelCreate = include('helpers/modelCreate');
 const name = 'EntradaCampo';
 const tableName = 'SNN_DATOS_ENTRADA_CAMPOS';
 const selectableProps = [
-    'id',
     'id_nombre_campo_entrada',
     'tipo_dato'
 ];

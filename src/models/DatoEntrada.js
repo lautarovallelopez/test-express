@@ -1,10 +1,10 @@
 const ModelCreate = include('/helpers/modelCreate');
-const name = 'DatoEntrada';
 const isArray = require('lodash/isArray');
 const uuid = require('uuidv4').uuid;
 const head = require('lodash/head');
-const tableName = 'SNN_DATOS_ENTRADA';
 const map = require('lodash/map');
+const tableName = 'SNN_DATOS_ENTRADA';
+const name = 'DatoEntrada';
 const selectableProps = [
     'id',
     'id_propio',
@@ -31,18 +31,31 @@ const selectableProps = [
     'dato_numerico02_original',
     'dato_numerico03_original',
     'dato_numerico04_original',
+    'dato_numerico05_original',
+    'dato_numerico06_original',
+    'dato_numerico07_original',
+    'dato_numerico08_original',
+    'dato_numerico09_original',
+    'dato_numerico10_original',
+    'dato_numerico11_original',
+    'dato_numerico12_original',
     'dato_alfabetico01_original',
     'dato_alfabetico02_original',
     'dato_alfabetico03_original',
     'dato_alfabetico04_original',
+    'dato_alfabetico05_original',
+    'dato_alfabetico06_original',
     'dato_alfanumerico01_original',
     'dato_alfanumerico02_original',
     'dato_alfanumerico03_original',
     'dato_alfanumerico04_original',
+    'dato_alfanumerico05_original',
+    'dato_alfanumerico06_original',
     'dato_decimal01_original',
     'dato_decimal02_original',
     'id_operativo',
-    'id_lote'
+    'id_lote',
+    'index'
 ];
 const timeout = 1000000;
 class DatoEntrada extends ModelCreate{

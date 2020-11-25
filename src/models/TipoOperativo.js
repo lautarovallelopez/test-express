@@ -2,7 +2,6 @@ const ModelCreate = include('/helpers/modelCreate');
 const name = 'TipoOperativo';
 const tableName = 'SNN_TIPO_OPERATIVO';
 const selectableProps = [
-    'id',
     'id_tipo_operativo',
     'descripcion'
 ];

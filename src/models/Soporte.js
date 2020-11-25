@@ -2,7 +2,6 @@ const ModelCreate = include('/helpers/modelCreate');
 const name = 'Soporte';
 const tableName = 'SNN_SOPORTE';
 const selectableProps = [
-    'id',
     'id_soporte',
     'descripcion'
 ];
