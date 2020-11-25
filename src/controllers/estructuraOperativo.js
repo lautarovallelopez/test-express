@@ -5,7 +5,10 @@ class EstructuraOperativoController {
             await EstructuraOperativo.startTransaction();
             const estructuras = await EstructuraOperativo.find(req.query);
             await EstructuraOperativo.commitTransaction();
-            res.send({estructuras});
+            res.send({
+                estructuras,
+                campos : EstructuraOperativo.selectableProps
+            });
         }catch(error){
             next(error);
         }
