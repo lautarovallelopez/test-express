@@ -4,10 +4,13 @@ class EstructuraOperativoController {
         try{
             await EstructuraOperativo.startTransaction();
             const estructuras = await EstructuraOperativo.find(req.query);
+            const total = await EstructuraOperativo.countDocuments();
             await EstructuraOperativo.commitTransaction();
             res.send({
                 estructuras,
-                campos : EstructuraOperativo.selectableProps
+                campos : EstructuraOperativo.selectableProps,
+                total,
+                limit: parseInt(process.env.PAGE_SIZE)
             });
         }catch(error){
             next(error);
@@ -65,6 +68,13 @@ class EstructuraOperativoController {
             req.campos = await EstructuraOperativo.find({id_operativo:req.params.id_operativo}, ['nombre_original', 'id_nombre_campo_entrada']);
             await EstructuraOperativo.commitTransaction();
             next();
+        }catch(error){
+            next(error);
+        }
+    }
+    static fetchCampos(req, res, next){
+        try{
+            res.send({campos : EstructuraOperativo.selectableProps});
         }catch(error){
             next(error);
         }

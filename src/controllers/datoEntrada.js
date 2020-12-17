@@ -15,8 +15,7 @@ class DatoEntradaController{
             await DatoEntrada.commitTransaction();
             res.send({
                 success : true,
-                registrosInsertados : result.length,
-                message : result[9]
+                result
             });
         }catch(error){
             next(error);

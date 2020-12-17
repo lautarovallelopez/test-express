@@ -9,6 +9,7 @@ const isObject = require('lodash/isObject');
 const map = require('lodash/map');
 const toLower = require('lodash/toLower');
 const transform = require('lodash/transform');
+const toNumber = require('lodash/toNumber');
 // The model that uses Knexjs to store and retrieve data from a
 // database using the provided `knex` instance.
 // Custom functionality can be composed on top of this set of models.
@@ -211,7 +212,7 @@ class ModelCreate {
     }
 
     async countDocuments (filters = {}) {
-        const count = head(await this.knex(this.tableName).count('id').where(filters).timeout(this.timeout))[''];
+        const count = head(await this.knex(this.tableName).count('id').where(filters).timeout(this.timeout))['count(`id`)'];
         return count;
     }
 
@@ -236,6 +237,18 @@ class ModelCreate {
             }
         }, {});
         return newObject;
+    }
+    findLimit({
+        skip,
+        filter = {}
+    }) {
+        const results = this.knex.select()
+            .from(this.tableName)
+            .where(filter)
+            .limit(process.env.PAGE_SIZE)
+            .offset(toNumber(process.env.PAGE_SIZE) * toNumber(skip));
+
+        return results;
     }
 }
 
